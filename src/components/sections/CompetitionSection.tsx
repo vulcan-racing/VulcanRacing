@@ -79,7 +79,8 @@ export default function CompetitionSection() {
         {/* Race Track Timeline */}
         <div className="relative max-w-4xl mx-auto">
           {/* Track line */}
-          <div className="absolute left-8 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5">
+          {/* md:bottom-16 matches the finish text's md:pt-16 so the line ends at the trophy, not through the text */}
+          <div className="absolute left-8 md:left-1/2 md:-translate-x-px top-0 bottom-0 md:bottom-16 w-0.5">
             <div className="h-full bg-gradient-to-b from-racing-red via-neon-orange via-50% to-racing-red/20" />
             {/* Dashed overlay */}
             <div
@@ -152,11 +153,13 @@ export default function CompetitionSection() {
             className="relative flex justify-center"
           >
             <div className="absolute left-8 md:left-1/2 -translate-x-1/2">
-              <div className="w-12 h-12 rounded-full gradient-red flex items-center justify-center text-xl shadow-lg shadow-racing-red/30">
+              {/* Dark fill: a gold trophy emoji vanishes on the gold gradient */}
+              <div className="w-12 h-12 rounded-full bg-carbon border-2 border-racing-red flex items-center justify-center text-2xl shadow-lg shadow-racing-red/30">
                 🏆
               </div>
             </div>
-            <div className="ml-20 md:ml-0 md:text-center mt-1">
+            {/* Beside the trophy on mobile; below it on md+, where both are centred on the track */}
+            <div className="ml-20 md:ml-0 md:pt-16 md:text-center mt-1">
               <span className="font-racing text-sm font-bold tracking-[0.2em] gradient-text-red">
                 RACE DAY — FORMULA BHARAT
               </span>
