@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { submitForm } from "@/lib/submitForm";
 
+// Keep in sync with the department list in google-apps-script/Code.gs
 const deptOptions = [
   "Mechanical",
   "Aerodynamics",
@@ -20,22 +22,33 @@ const recruitmentTimeline = [
   { step: "05", title: "Welcome!", desc: "Join the Vulcan Racing family and start contributing." },
 ];
 
-export default function RecruitmentSection() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    year: "",
-    branch: "",
-    department: "",
-    skills: "",
-  });
-  const [submitted, setSubmitted] = useState(false);
+const emptyForm = {
+  name: "",
+  email: "",
+  phone: "",
+  year: "",
+  branch: "",
+  department: "",
+  skills: "",
+  website: "",
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
+export default function RecruitmentSection() {
+  const [formData, setFormData] = useState(emptyForm);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    setStatus("sending");
+    try {
+      await submitForm("recruitment", formData);
+      setFormData(emptyForm);
+      setStatus("sent");
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
@@ -99,7 +112,7 @@ export default function RecruitmentSection() {
               APPLICATION <span className="text-racing-red">FORM</span>
             </h3>
 
-            {submitted ? (
+            {status === "sent" ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -119,6 +132,17 @@ export default function RecruitmentSection() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Honeypot: off-screen for people; bots fill it and the backend drops them */}
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="absolute -left-[9999px]"
+                  value={formData.website}
+                  onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                />
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
                     <label htmlFor="apply-name" className="block text-xs font-racing tracking-wider text-white/40 mb-2 uppercase">
@@ -232,11 +256,20 @@ export default function RecruitmentSection() {
                   />
                 </div>
 
-                <button type="submit" className="btn-primary w-full justify-center !py-4">
+                {status === "error" && (
+                  <p role="alert" className="text-sm text-red-400">
+                    Submitting failed. Please try again, or email us at racingvulcan@gmail.com.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="btn-primary w-full justify-center !py-4 disabled:opacity-60"
+                >
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
-                  Submit Application
+                  {status === "sending" ? "Submitting..." : "Submit Application"}
                 </button>
               </form>
             )}

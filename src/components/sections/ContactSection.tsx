@@ -2,15 +2,26 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { submitForm } from "@/lib/submitForm";
+
+const emptyForm = { name: "", email: "", message: "", website: "" };
 
 export default function ContactSection() {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
+  const [formData, setFormData] = useState(emptyForm);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 5000);
+    setStatus("sending");
+    try {
+      await submitForm("contact", formData);
+      setFormData(emptyForm);
+      setStatus("sent");
+      setTimeout(() => setStatus("idle"), 5000);
+    } catch (err) {
+      console.error(err);
+      setStatus("error");
+    }
   };
 
   return (
@@ -133,7 +144,7 @@ export default function ContactSection() {
                 SEND A <span className="text-racing-red">MESSAGE</span>
               </h3>
 
-              {sent ? (
+              {status === "sent" ? (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -148,6 +159,17 @@ export default function ContactSection() {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* Honeypot: off-screen for people; bots fill it and the backend drops them */}
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="absolute -left-[9999px]"
+                    value={formData.website}
+                    onChange={(e) => setFormData({ ...formData, website: e.target.value })}
+                  />
                   <div>
                     <label htmlFor="contact-name" className="block text-xs font-racing tracking-wider text-white/40 mb-2 uppercase">
                       Name *
@@ -190,8 +212,17 @@ export default function ContactSection() {
                       placeholder="Your message..."
                     />
                   </div>
-                  <button type="submit" className="btn-primary w-full justify-center !py-4">
-                    Send Message
+                  {status === "error" && (
+                    <p role="alert" className="text-sm text-red-400">
+                      Sending failed. Please try again, or email us at racingvulcan@gmail.com.
+                    </p>
+                  )}
+                  <button
+                    type="submit"
+                    disabled={status === "sending"}
+                    className="btn-primary w-full justify-center !py-4 disabled:opacity-60"
+                  >
+                    {status === "sending" ? "Sending..." : "Send Message"}
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                     </svg>
