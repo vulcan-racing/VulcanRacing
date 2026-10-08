@@ -1,0 +1,440 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════
+   VULCAN RACING — DESIGN SYSTEM
+   Premium Motorsport Aesthetic
+   ═══════════════════════════════════════════════ */
+
+@theme {
+  --color-vulcan-black: #000000;
+  --color-vulcan-dark: #050505;
+  --color-carbon: #0f0f0f;
+  --color-carbon-light: #151515;
+  --color-steel: #222222;
+  --color-steel-light: #333333;
+  --color-silver: #c0c0c0;
+  --color-silver-light: #e0e0e0;
+  --color-racing-red: #d4a836;
+  --color-racing-red-dark: #aa8010;
+  --color-neon-orange: #ffcc00;
+  --color-neon-orange-light: #ffe680;
+  --color-accent-gold: #d4a836;
+  --color-accent-bronze: #cd7f32;
+
+  /* --font-orbitron / --font-inter are set by next/font in layout.tsx */
+  --font-racing: var(--font-orbitron), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+
+  /* Animation durations */
+  --animate-fade-in: fade-in 0.8s ease-out forwards;
+  --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
+  --animate-slide-in-left: slide-in-left 0.8s ease-out forwards;
+  --animate-slide-in-right: slide-in-right 0.8s ease-out forwards;
+  --animate-scale-in: scale-in 0.6s ease-out forwards;
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 20s linear infinite;
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-tachometer: tachometer 2s ease-out forwards;
+  --animate-light-streak: light-streak 3s ease-in-out infinite;
+}
+
+/* Fonts loaded at top of file */
+
+/* ═══════════ KEYFRAMES ═══════════ */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(212, 168, 54, 0.3); }
+  50% { box-shadow: 0 0 40px rgba(212, 168, 54, 0.6); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes tachometer {
+  from { transform: rotate(-135deg); }
+  to { transform: rotate(90deg); }
+}
+
+@keyframes light-streak {
+  0% { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
+  50% { opacity: 1; }
+  100% { transform: translateX(200vw) skewX(-20deg); opacity: 0; }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.5; }
+}
+
+@keyframes dash-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes counter-fill {
+  from { width: 0%; }
+}
+
+/* ═══════════ BASE STYLES ═══════════ */
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-racing-red) var(--color-carbon);
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-vulcan-black);
+  color: #ffffff;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+::selection {
+  background-color: rgba(212, 168, 54, 0.4);
+  color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-carbon);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-racing-red);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neon-orange);
+}
+
+/* ═══════════ CARBON FIBER TEXTURE ═══════════ */
+.carbon-fiber {
+  background-image:
+    linear-gradient(45deg, rgba(30,30,30,0.8) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(30,30,30,0.8) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(30,30,30,0.8) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(30,30,30,0.8) 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+}
+
+.carbon-fiber-subtle {
+  background-image:
+    linear-gradient(45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255,255,255,0.02) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.02) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.02) 75%);
+  background-size: 4px 4px;
+  background-position: 0 0, 0 2px, 2px -2px, -2px 0px;
+}
+
+/* ═══════════ GLASSMORPHISM ═══════════ */
+.glass {
+  background: rgba(26, 26, 26, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-strong {
+  background: rgba(26, 26, 26, 0.85);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.glass-card {
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.7), rgba(42, 42, 42, 0.4));
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-card:hover {
+  border-color: rgba(212, 168, 54, 0.3);
+  box-shadow: 0 8px 32px rgba(212, 168, 54, 0.15), 0 0 0 1px rgba(212, 168, 54, 0.1);
+  transform: translateY(-4px);
+}
+
+/* ═══════════ GRADIENT UTILITIES ═══════════ */
+.gradient-red {
+  background: linear-gradient(135deg, var(--color-racing-red), var(--color-neon-orange));
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #ffffff, var(--color-silver));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-red {
+  background: linear-gradient(135deg, var(--color-racing-red), var(--color-neon-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ═══════════ RACING LINE ACCENTS ═══════════ */
+.racing-line {
+  position: relative;
+}
+.racing-line::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-racing-red), var(--color-neon-orange));
+  border-radius: 2px;
+}
+
+.racing-line-center::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ═══════════ BUTTON STYLES ═══════════ */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, var(--color-racing-red), var(--color-racing-red-dark));
+  color: #ffffff;
+  font-family: var(--font-racing);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 168, 54, 0.4);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-racing);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-racing-red);
+  background: rgba(212, 168, 54, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(212, 168, 54, 0.2);
+}
+
+.btn-outline-orange {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: transparent;
+  color: var(--color-neon-orange);
+  font-family: var(--font-racing);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--color-neon-orange);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-orange:hover {
+  background: rgba(255, 204, 0, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 204, 0, 0.3);
+}
+
+/* ═══════════ SECTION STYLES ═══════════ */
+.section-padding {
+  padding: 6rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 8rem 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .section-padding {
+    padding: 10rem 4rem;
+  }
+}
+
+.section-title {
+  font-family: var(--font-racing);
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  line-height: 1.1;
+}
+
+.section-subtitle {
+  font-family: var(--font-racing);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--color-racing-red);
+  font-weight: 600;
+}
+
+/* ═══════════ GRID PATTERN BACKGROUND ═══════════ */
+.grid-pattern {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ═══════════ NOISE TEXTURE ═══════════ */
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════ LIGHT STREAKS ═══════════ */
+.light-streak {
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 54, 0.6), transparent);
+  animation: light-streak 4s ease-in-out infinite;
+}
+
+/* ═══════════ FORM STYLES ═══════════ */
+.form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: rgba(26, 26, 26, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: #ffffff;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--color-racing-red);
+  box-shadow: 0 0 0 3px rgba(212, 168, 54, 0.15);
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ═══════════ MARQUEE ═══════════ */
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.marquee-content {
+  display: inline-flex;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-content:hover {
+  animation-play-state: paused;
+}
+
+/* ═══════════ RESPONSIVE CONTAINER ═══════════ */
+.container-racing {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-racing {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-racing {
+    padding: 0 4rem;
+  }
+}
