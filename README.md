@@ -100,12 +100,17 @@ Run `npm run build` before you push. "LF will be replaced by CRLF" warnings on W
 
 ## Deployment
 
-The site isn't deployed yet. The options compared so far:
+The site is hosted on Vercel (free Hobby plan) at https://vulcan-racing.vercel.app, in the project `vulcan-racing` under the vulcan-racing Vercel account.
 
-- Vercel (free Hobby plan) runs Next.js with no setup and optimises images. Hobby is for non-commercial use only. A student team site with recruitment and a sponsors section should qualify, but selling merchandise or running ads would need the paid plan.
-- Cloudflare Pages allows commercial use for free. The simplest route there is a static export (`output: "export"` in `next.config.ts`, with `images: { unoptimized: true }`), which means compressing the photos by hand first.
+- Every push to `main` on GitHub deploys to the live site automatically, usually within a minute. Check progress in the Vercel dashboard under Deployments.
+- Pushes to any other branch create a preview deployment with its own URL, which is the safe way to try a change before it goes live. Previews are only visible to people logged in to the Vercel account.
+- A broken deploy doesn't replace the live site: if the build fails, the previous version stays up. To roll back a bad but successful deploy, open an older deployment in the dashboard and choose "Promote to Production" (or run `vercel promote <deployment-url>`).
+- `vercel.json` tells Vercel this is a Next.js project. Don't delete it; without it the site deploys as an empty folder and shows 404.
+- Hobby is for non-commercial use only. A student team site with recruitment and a sponsors section should qualify, but selling merchandise or running ads would need the paid plan (or a move to Cloudflare Pages, which allows commercial use for free).
 
-The forms work with either, because the browser sends data straight to Google.
+There are no environment variables to set: the forms send data straight to Google (see [docs/forms.md](docs/forms.md)).
+
+To use the Vercel CLI locally, log in to the vulcan-racing account and run `npx vercel link` in the project folder. It creates `.vercel/` and `.env.local`, both git-ignored; never commit them.
 
 ## Known issues and to-dos
 
